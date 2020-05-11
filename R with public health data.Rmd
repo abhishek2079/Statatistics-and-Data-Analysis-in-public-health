@@ -1,0 +1,159 @@
+---
+title: "R with public health data"
+author: "Abhishek S D"
+date: "11/05/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Basic R
+
+1. To check which directory you are working in:
+
+```{r}
+getwd()
+```
+
+2. To import the data.
+You need to change the “file” location to where you’ve stored the data set
+
+```{r}
+g <- read.csv(file = "D:/Courses/R/cancer data for MOOC 1.csv",header = TRUE, sep = ',') 
+```
+
+3. To have a look at the first few rows of our data set:
+
+```{r}
+head(g)
+```
+
+4. To inspect the `age` variable:
+
+```{r}
+g$age
+```
+
+5. To display a summary of the genders of our patients:
+
+```{r}
+table(g$gender)
+```
+
+6. To display a summary of the BMI of our patient:
+
+```{r}
+summary(g$bmi)
+```
+
+7. To display a summary of the smoking status of our patients:
+
+```{r}
+table(g$smoking) 
+```
+
+8. To display a summary of the exercise status of our patients:
+
+```{r}
+table(g$exercise)
+```
+
+9. To create a new variable `fruitveg`, which sums the daily consumption of fruit and veg of each patient:
+
+```{r}
+g$fruitveg <- g$fruit + g$veg 
+```
+
+10. To display a histogram of the ages of our patients:
+
+```{r}
+hist(g$age)
+```
+
+11. To create a new binary variable **five_a_day**, whether the patient eats at least 5 fruit or veg a day:
+
+```{r}
+g$five_a_day <- ifelse(g$fruitveg >= 5, 1, 0)
+```
+
+12. To summarise the **five_a_day** variable:
+
+```{r}
+table(g$five_a_day) 
+```
+
+13. To display a histogram of the daily fruit and veg consumption of our patients, including a title and proper axes:
+
+```{r}
+hist(g$fruitveg, xlab = "Portions of fruit and vegetables", main = "Daily consumption of fruit and vegetables combined", axes = F)
+
+axis(side = 1, at = seq(0, 11, 1)) 
+
+axis(side = 2, at = seq(0, 16, 2))
+```
+
+14. To create a new binary variable **healthy_BMI**, whether the patient has a healthy BMI or not:
+
+```{r}
+g$healthy_BMI <- ifelse(g$bmi > 18.5 & g$bmi < 25, 1, 0) 
+```
+
+15. To summarise **healthy_BMI**:
+
+```{r}
+table(g$healthy_BMI) 
+```
+
+16.  To run a chi-squared test to look for an association between eating five or more fruit and veg a day and cancer:
+
+```{r}
+chisq.test(x = g$five_a_day, y = g$cancer) 
+```
+
+16. To run a (two-tailed) t-test to see whether the mean BMI of those with cancer is different from the mean BMI of those without cancer: 
+
+```{r}
+t.test(g$bmi ~ g$cancer)
+```
+
+17. To run a (two-tailed) t-test to see whether the mean BMI of those with cancer is different from the mean BMI of those without cancer, where the variances are equal:
+
+```{r}
+t.test(g$bmi ~ g$cancer, var.equal = T)
+```
+
+
+18. To run a t-test to see whether the mean BMI of all patients is different from 25:
+
+```{r}
+t.test(g$bmi, mu = 25)
+```
+
+19. To run a chi-squared test to see whether there is an association between eating five or more fruit a day and having cancer:
+
+```{r}
+chisq.test(x = g$five_a_day, y = g$cancer)
+```
+
+
+20. To create a new binary variable, whether overweight or not according to their BMI:
+
+```{r}
+g$overweight <- ifelse(g$bmi >= 25, 1, 0)
+```
+
+21. To summarise the `overweight` variable:
+
+```{r}
+table(g$overweight) 
+```
+
+22. To run a chi-squared test to see whether there is an association between being overweight and cancer:
+
+```{r}
+chisq.test(x = g$overweight, y = g$cancer)
+```
+
