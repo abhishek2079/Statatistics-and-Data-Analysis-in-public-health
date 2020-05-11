@@ -157,3 +157,5 @@ table(g$overweight)
 chisq.test(x = g$overweight, y = g$cancer)
 ```
 
+That's the end of basics in R.
+
